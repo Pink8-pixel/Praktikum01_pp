@@ -1,1 +1,2 @@
-backwardPropagation 
+backwardPropagation (layer)
+6d) trainBatch und computeAccuracy (1 Punkt)

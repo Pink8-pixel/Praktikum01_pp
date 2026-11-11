@@ -1,0 +1,19 @@
+#pragma once
+
+#include <activation/ActivationFunction.h>
+
+#include <string>
+
+namespace dnn
+{
+    class ReLU : ActivationFunction
+    {
+    public:
+        ReLU() = default;
+        ~ReLU() = default;
+
+        double activation(double x) override;
+        double activationBackwards(double x) override;
+        std::string getName() const override;
+    };
+} // namespace dnn

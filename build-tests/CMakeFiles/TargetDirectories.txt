@@ -1,0 +1,15 @@
+/home/ska/Desktop/programming/code/build-tests/CMakeFiles/dnn_objlib.dir
+/home/ska/Desktop/programming/code/build-tests/CMakeFiles/DNN_so.dir
+/home/ska/Desktop/programming/code/build-tests/CMakeFiles/DNN_a.dir
+/home/ska/Desktop/programming/code/build-tests/CMakeFiles/DNN_app.dir
+/home/ska/Desktop/programming/code/build-tests/CMakeFiles/test.dir
+/home/ska/Desktop/programming/code/build-tests/CMakeFiles/edit_cache.dir
+/home/ska/Desktop/programming/code/build-tests/CMakeFiles/rebuild_cache.dir
+/home/ska/Desktop/programming/code/build-tests/tests/compilation/CMakeFiles/test_compilation_lib.dir
+/home/ska/Desktop/programming/code/build-tests/tests/compilation/CMakeFiles/test_compilation_interface.dir
+/home/ska/Desktop/programming/code/build-tests/tests/compilation/CMakeFiles/test_compilation_check.dir
+/home/ska/Desktop/programming/code/build-tests/tests/compilation/CMakeFiles/test_compilation_app.dir
+/home/ska/Desktop/programming/code/build-tests/tests/compilation/CMakeFiles/test_compilation.dir
+/home/ska/Desktop/programming/code/build-tests/tests/compilation/CMakeFiles/test.dir
+/home/ska/Desktop/programming/code/build-tests/tests/compilation/CMakeFiles/edit_cache.dir
+/home/ska/Desktop/programming/code/build-tests/tests/compilation/CMakeFiles/rebuild_cache.dir

@@ -6,7 +6,7 @@
 
 namespace dnn
 {
-    class Sigmoid : ActivationFunction
+    class Sigmoid : public ActivationFunction
     {
     public:
         Sigmoid() = default;

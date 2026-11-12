@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <stdexcept>
-#include <assert.h>
 
 namespace dnn
 {
@@ -13,7 +12,6 @@ namespace dnn
         for (size_t i = 0; i < layerParameters.size(); i++) // number of layers=layerParameters.size()
         {
             auto &[weights, bias, activationFunction] = layerParameters[i]; // extract parameters
-            assert(!weights.empty());
 
             const auto inputSize = weights[0].size();
             const auto outputSize = weights.size();
@@ -43,7 +41,6 @@ namespace dnn
 
     const std::vector<double> &Network::getLayerInput(uint64_t layerId) const
     {
-        assert(layerId < layers.size());
 
         if (layerId == 0)
         {

@@ -2,13 +2,11 @@
 
 #include <stdexcept>
 #include <string>
-#include <assert.h>
 
 namespace dnn
 {
     double dotProduct(const std::vector<double> &a, const std::vector<double> &b)
     {
-        assert(a.size() == b.size());
         double result = 0;
         for (size_t i = 0; i < a.size(); i++)
         {
@@ -39,7 +37,6 @@ namespace dnn
 
     std::vector<double> addVectors(const std::vector<double> &a, const std::vector<double> &b)
     {
-        assert(a.size() == b.size());
         std::vector<double> result = a;
         for (size_t i = 0; i < result.size(); i++)
         {
@@ -63,11 +60,9 @@ namespace dnn
 
     std::vector<std::vector<double>> addMats(const std::vector<std::vector<double>> &a, const std::vector<std::vector<double>> &b)
     {
-        assert(a.size() == b.size());
         auto result = a;
         for (size_t i = 0; i < result.size(); ++i)
         {
-            assert(result[i].size() == b[i].size());
 
             for (size_t j = 0; j < result[i].size(); ++j)
             {

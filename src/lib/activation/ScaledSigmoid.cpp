@@ -2,6 +2,10 @@
 #include <cmath>
 namespace dnn
 {
+
+    ScaledSigmoid::ScaledSigmoid(double min, double max) : min(min), max(max)
+    {
+    }
     double ScaledSigmoid::activation(double x)
     {
         const double y = (max - min) * (1.0 / (1.0 + std::exp(-x)));

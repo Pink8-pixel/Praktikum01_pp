@@ -7,7 +7,7 @@
 // Sigmoid whose output is linearly rescaled from (0, 1) to (min, max).
 namespace dnn
 {
-    class ScaledSigmoid : ActivationFunction
+    class ScaledSigmoid : public ActivationFunction
     {
     public:
         ScaledSigmoid(double min, double max);

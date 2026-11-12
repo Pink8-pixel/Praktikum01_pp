@@ -6,7 +6,7 @@
 
 namespace dnn
 {
-    class ReLU : ActivationFunction
+    class ReLU : public ActivationFunction
     {
     public:
         ReLU() = default;

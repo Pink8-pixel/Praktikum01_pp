@@ -7,7 +7,6 @@ namespace dnn
     template <typename T>
     std::vector<double> normalize(const std::vector<T> &values, int maxValue)
     {
-        assert(!values.empty());
         std::vector<double> r;
         r.reserve(values.size());
         for (size_t i = 0; i < values.size(); i++)
@@ -20,8 +19,7 @@ namespace dnn
     template <typename T>
     std::vector<double> normalize(const std::vector<T> &values)
     {
-        assert(!values.empty());
-        const T *maxValue = std::max_element(values.begin(), values.end());
+        const auto maxValue = std::max_element(values.begin(), values.end());
         return normalize(values, static_cast<int>(*maxValue));
     }
 

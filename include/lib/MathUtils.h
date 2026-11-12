@@ -28,8 +28,7 @@ namespace dnn
 
     std::vector<double> scaleVector(const std::vector<double> &values, const double factor);
     std::vector<double> addVectors(const std::vector<double> &a, const std::vector<double> &b);
-    
-    
+
     std::vector<std::vector<double>> scaleMat(const std::vector<std::vector<double>> &m, const double factor);
     std::vector<std::vector<double>> addMats(const std::vector<std::vector<double>> &a, const std::vector<std::vector<double>> &b);
 

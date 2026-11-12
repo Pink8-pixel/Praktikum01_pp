@@ -53,6 +53,13 @@ namespace dnn
     void Network::fullForwardPropagation(const std::vector<double> &input)
     {
         initialInput = input;
+
+        if (layers.empty())
+        {
+            output = input;
+            return;
+        }
+
         for (size_t i = 0; i < layers.size(); i++)
         {
             layers[i]->forwardPropagation(getLayerInput(i));
@@ -62,6 +69,11 @@ namespace dnn
 
     void Network::fullBackwardPropagation(const std::vector<double> &predictedOutput, const std::vector<double> &actualOutput)
     {
+        if (ownedLossFunction == nullptr)
+        {
+            throw std::logic_error("Cannot backpropagate: no loss function has been set.");
+        }
+
         std::vector<double> dACurr = ownedLossFunction->getGradient(predictedOutput, actualOutput);
 
         for (size_t i = layers.size(); i-- > 0;)
@@ -71,6 +83,7 @@ namespace dnn
         }
     }
 
+    
     void Network::trainBatch(const std::vector<std::vector<double>> &inputs, const std::vector<std::vector<double>> &actualOutputs, std::size_t batchSize,
                              int epochs, double learningRate)
     {
@@ -92,38 +105,13 @@ namespace dnn
         {
             throw std::invalid_argument("Training inputs and outputs must have the same number of samples.");
         }
-        if (batchSize == 0)
+        if (batchSize <= 0)
         {
             throw std::invalid_argument("Batch size must be greater than zero.");
         }
-        if (epochs <= 0)
+        if (epochs < 0)
         {
-            throw std::invalid_argument("Epoch count must be greater than zero.");
-        }
-
-        const auto &firstWeights = layers.front()->getWeights();
-        const auto &lastWeights = layers.back()->getWeights();
-
-        if (firstWeights.empty() || lastWeights.empty())
-        {
-            throw std::logic_error("Cannot train: layer weights are not initialized.");
-        }
-
-        const std::size_t expectedInputSize = firstWeights.front().size();
-        const std::size_t expectedOutputSize = lastWeights.size();
-
-        for (std::size_t i = 0; i < inputs.size(); ++i)
-        {
-            if (inputs[i].size() != expectedInputSize)
-            {
-                throw std::invalid_argument("Training input at index " + std::to_string(i) +
-                                            " has the wrong size.");
-            }
-            if (actualOutputs[i].size() != expectedOutputSize)
-            {
-                throw std::invalid_argument("Training output at index " + std::to_string(i) +
-                                            " has the wrong size.");
-            }
+            throw std::invalid_argument("Epoch count must not be negative.");
         }
 
         costHistory.clear();
@@ -179,27 +167,13 @@ namespace dnn
             throw std::invalid_argument("Inputs and outputs must have the same number of samples.");
         }
 
-        const std::size_t expectedInputSize = layers.front()->getWeights().front().size();
-        const std::size_t expectedOutputSize = layers.back()->getWeights().size();
-
         double totalCorrect = 0.0;
-
         for (std::size_t i = 0; i < inputs.size(); ++i)
         {
-            if (inputs[i].size() != expectedInputSize)
-            {
-                throw std::invalid_argument("Input at index " + std::to_string(i) +
-                                            " has the wrong size.");
-            }
-            if (actualOutputs[i].size() != expectedOutputSize)
-            {
-                throw std::invalid_argument("Output at index " + std::to_string(i) +
-                                            " has the wrong size.");
-            }
-
             fullForwardPropagation(inputs[i]);
             totalCorrect += ownedLossFunction->getAccuracyValue(output, actualOutputs[i]);
         }
+
         return totalCorrect / static_cast<double>(inputs.size());
     }
 

@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/ska/Desktop/programming/code/build/cmake_install.cmake",
-		"/home/ska/Desktop/programming/code/build/tests/compilation/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

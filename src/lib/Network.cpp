@@ -83,21 +83,20 @@ namespace dnn
         }
     }
 
-    
+
     void Network::trainBatch(const std::vector<std::vector<double>> &inputs, const std::vector<std::vector<double>> &actualOutputs, std::size_t batchSize,
                              int epochs, double learningRate)
     {
-
         // all the checks i wanna die
         if (ownedLossFunction == nullptr)
         {
             throw std::logic_error("Cannot train: no loss function has been set.");
         }
-        if (layers.empty())
+        if (layers.size() == 0)
         {
             throw std::logic_error("Cannot train: the network has no layers.");
         }
-        if (inputs.empty() || actualOutputs.empty())
+        if (inputs.size() == 0 || actualOutputs.size() == 0)
         {
             throw std::invalid_argument("Training inputs and outputs must not be empty.");
         }
@@ -105,7 +104,7 @@ namespace dnn
         {
             throw std::invalid_argument("Training inputs and outputs must have the same number of samples.");
         }
-        if (batchSize <= 0)
+        if (batchSize == 0)
         {
             throw std::invalid_argument("Batch size must be greater than zero.");
         }
@@ -114,37 +113,55 @@ namespace dnn
             throw std::invalid_argument("Epoch count must not be negative.");
         }
 
+        int entrance = layers[0]->getWeights()[0].size();
+        int Output_1 = layers[layers.size() - 1]->getWeights().size();
+
+        for (int i = 0; i < inputs.size(); i++)
+        {
+            if (inputs[i].size() < entrance)
+            {
+                throw std::invalid_argument("Input is smaller than the input size of the first layer.");
+            }
+            if (actualOutputs[i].size() < Output_1)
+            {
+                throw std::invalid_argument("Output is smaller than the output size of the last layer.");
+            }
+        }
+
         costHistory.clear();
         accuracyHistory.clear();
 
-        for (int epoch = 0; epoch < epochs; ++epoch)
+        for (int eppoch = 0; eppoch < epochs; eppoch++)
         {
             double epochCost = 0.0;
             double epochAccuracy = 0.0;
 
-            for (std::size_t i = 0; i < inputs.size(); ++i)
+            for (int i = 0; i < inputs.size(); i++)
             {
                 fullForwardPropagation(inputs[i]);
 
-                epochCost += ownedLossFunction->getCostValue(output, actualOutputs[i]);
-                epochAccuracy += ownedLossFunction->getAccuracyValue(output, actualOutputs[i]);
+                epochCost = epochCost + ownedLossFunction->getCostValue(output, actualOutputs[i]);
+                epochAccuracy = epochAccuracy + ownedLossFunction->getAccuracyValue(output, actualOutputs[i]);
 
                 fullBackwardPropagation(output, actualOutputs[i]);
 
-                const bool endOfBatch = ((i + 1) % batchSize == 0);
-                const bool endOfDataset = (i + 1 == inputs.size());
-
-                if (endOfBatch || endOfDataset)
+                if (i % batchSize == 0)
                 {
-                    for (Layer *layer : layers)
+                    for (int j = 0; j < layers.size(); j++)
                     {
-                        layer->commitToWeights(learningRate);
+                        layers[j]->commitToWeights(learningRate);
                     }
                 }
             }
 
-            costHistory.push_back(epochCost / static_cast<double>(inputs.size()));
-            accuracyHistory.push_back(epochAccuracy / static_cast<double>(inputs.size()));
+            for (int j = 0; j < layers.size(); j++)
+            {
+                layers[j]->commitToWeights(learningRate);
+            }
+
+            double groesse = inputs.size();
+            costHistory.push_back(epochCost / groesse);
+            accuracyHistory.push_back(epochAccuracy / groesse);
         }
     }
 
@@ -154,11 +171,11 @@ namespace dnn
         {
             throw std::logic_error("Cannot compute accuracy: no loss function has been set.");
         }
-        if (layers.empty())
+        if (layers.size() == 0)
         {
             throw std::logic_error("Cannot compute accuracy: the network has no layers.");
         }
-        if (inputs.empty() || actualOutputs.empty())
+        if (inputs.size() == 0 || actualOutputs.size() == 0)
         {
             throw std::invalid_argument("Inputs and outputs must not be empty.");
         }
@@ -167,14 +184,30 @@ namespace dnn
             throw std::invalid_argument("Inputs and outputs must have the same number of samples.");
         }
 
-        double totalCorrect = 0.0;
-        for (std::size_t i = 0; i < inputs.size(); ++i)
+        int entrance = layers[0]->getWeights()[0].size();
+        int Output_1 = layers[layers.size() - 1]->getWeights().size();
+
+        for (int i = 0; i < inputs.size(); i++)
         {
-            fullForwardPropagation(inputs[i]);
-            totalCorrect += ownedLossFunction->getAccuracyValue(output, actualOutputs[i]);
+            if (inputs[i].size() < entrance)
+            {
+                throw std::invalid_argument("Input is smaller than the input size of the first layer.");
+            }
+            if (actualOutputs[i].size() < Output_1)
+            {
+                throw std::invalid_argument("Output is smaller than the output size of the last layer.");
+            }
         }
 
-        return totalCorrect / static_cast<double>(inputs.size());
+        double totalCorrect = 0.0;
+        for (int i = 0; i < inputs.size(); i++)
+        {
+            fullForwardPropagation(inputs[i]);
+            totalCorrect = totalCorrect + ownedLossFunction->getAccuracyValue(output, actualOutputs[i]);
+        }
+
+        double groesse = inputs.size();
+        return totalCorrect / groesse;
     }
 
     void Network::setLossFunction(LossFunction *lossFunction)

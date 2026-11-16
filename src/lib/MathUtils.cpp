@@ -8,7 +8,12 @@ namespace dnn
     double dotProduct(const std::vector<double> &a, const std::vector<double> &b)
     {
         double result = 0;
-        for (size_t i = 0; i < a.size(); i++)
+        int toul = a.size();
+        if (b.size() < toul)
+        {
+            toul = b.size();
+        }
+        for (int i = 0; i < toul; i++)
         {
             result += a[i] * b[i];
         }
